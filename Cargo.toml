@@ -1,0 +1,10 @@
+[package]
+name = "pairing"
+version = "0.1.0"
+authors = ["arthurprs <arthurprs@gmail.com>"]
+
+[dependencies]
+stash="*"
+
+[dev-dependencies]
+rand="*"
