@@ -181,6 +181,9 @@ impl<T: PartialOrd> Heap<T> {
             return NULL;
         }
 
+        // Performs an iterative pairwise merging of a list of nodes until a
+        // single tree remains. Implements the two-pass method without using
+        // explicit recursion (preventing stack overflow).
         let mut next = handle;
         let mut tail = NULL;
         let mut result = NULL;
