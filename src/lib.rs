@@ -359,13 +359,12 @@ mod bench {
     use super::Heap as PairingHeap;
     use ::std::collections::BinaryHeap;
 
-    
-	fn setup_sample() -> Vec<i64> {
+	fn setup_sample() -> Vec<(i64, i64)> {
 		use rand::{thread_rng, sample};
 		let n       = 1000;
 		let mut rng = thread_rng();
-		// sample(&mut rng, 1..n, n as usize)
-        (0..n).map(|x| -x).collect()
+		sample(&mut rng, (0..n).map(|x| (-x, -x)), n as usize)
+        // (0..n).map(|x| (-x, -x)).collect()
     }
     
 	#[bench]
@@ -414,4 +413,34 @@ mod bench {
 			while let Some(_) = black_box(bh.pop()) {}
 		});
 	}
+
+    #[bench]
+    fn binary_heap_timeout(bencher: &mut Bencher) {
+        let mut bh = BinaryHeap::new();
+		let mut n = 0;
+        for _ in 0..1500 {
+            bh.push((-n, -n));
+            n += 1;
+        }
+		bencher.iter(|| {
+			bh.pop();
+            bh.push((-n, -n));
+            n += 1;
+		});
+    }
+
+    #[bench]
+    fn pairing_heap_timeout(bencher: &mut Bencher) {
+		let mut ph = PairingHeap::new();
+		let mut n = 0;
+        for _ in 0..1500 {
+            ph.push((-n, -n));
+            n += 1;
+        }
+		bencher.iter(|| {
+			ph.pop();
+            ph.push((-n, -n));
+            n += 1;
+		});
+    }
 }
